@@ -16,6 +16,15 @@ int sum(struct BinaryTree *tree) {
 		let(int, leaf) return *leaf;
 		let(struct Node, node) return sum(node->l) + node->x + sum(node->r);
 	}
+
+//if you are using GNU extensions or C2x, the types can be inferred!
+#if Sumtype_typeinference
+	match_tree(tree) {
+		let(leaf) return *leaf;
+		let(node) return sum(node->l) + node->x + sum(node->r);
+	}
+#endif
+
 	// Unreachable
 	return 0;
 }
@@ -96,6 +105,15 @@ iflet(struct BinaryTree, int, leaf, &tree) {
 } else {
 	printf("Not a leaf\n");
 }
+
+#if Sumtype_typeinference
+
+iflet_t(leaf, &tree) {
+	printf("A leaf with the value %d\n", *leaf);
+} else {
+	printf("Not a leaf\n");
+}
+#endif
 ```
 
 Finally, the `MATCHES` macro, taking a name of a variant and an expression, tests whether
