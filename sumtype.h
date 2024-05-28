@@ -26,7 +26,7 @@
 // which gradually expand to an indirect alias to the original macro
 // #define A 123
 // DEFER(A)() expands to "A()"
-// EXPAND(DEFER(A)()) expands to "123" 
+// EXPAND(DEFER(A)()) expands to "123"
 #define ST_EMPTY()
 #define ST_DEFER(id) id ST_EMPTY()
 #define ST_OBSTRUCT(...) __VA_ARGS__ ST_DEFER(ST_EMPTY)()
@@ -84,6 +84,13 @@ Sumtype_Constructors(A, __VA_ARGS__)
 	for(ty *name = &(sumtype_priv_matched_val->variant.name); \
 		name != (ty *)0; \
 		name = (ty *)0)
+
+#if defined(__GNUC__) || defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201710L
+#define Sumtype_typeinference
+#define match_t(expr) match(typeof(*expr), expr)
+#define let_t(name) let(typeof(sumtype_priv_matched_val->variant.name), name)
+#define iflet_t(name, expr) iflet(typeof(*expr), typeof(sumtype_priv_matched_val->variant.name), name, expr)
+#endif
 
 #define otherwise break; default:
 
