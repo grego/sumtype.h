@@ -15,10 +15,17 @@ Sumtype(
 )
 
 int sum(struct BinaryTree *tree) {
+#ifdef Sumtype_typeinference
+	match_t(tree) {
+		let_t(leaf) return *leaf;
+		let_t(node) return sum(node->l) + node->x + sum(node->r);
+	};
+#else
 	match(struct BinaryTree, tree) {
 		let(int, leaf) return *leaf;
 		let(struct Node, node) return sum(node->l) + node->x + sum(node->r);
 	}
+#endif
 	// Unreachable
 	return 0;
 }
@@ -65,6 +72,19 @@ int
 main() {
 	struct Haha something = Haha_name("hello");
 
+#ifdef Sumtype_typeinference
+	match_t(&something) {
+		let_t(name) {
+	    		printf("%s\n", *name);
+		}
+		let_t(id) {
+	    		printf("%d\n", *id);
+		}
+		otherwise {
+	    		printf("var\n");
+		}
+	};
+#else
 	match(struct Haha, &something) {
 		let(char *, name) {
 	    		printf("%s\n", *name);
@@ -76,11 +96,19 @@ main() {
 	    		printf("var\n");
 		}
 	};
-	
+#endif
+
 	if (MATCHES(name, &something)) puts("matches!");
 
 	struct ManyVariants many = ManyVariants_var31("damn");
+
+#ifdef Sumtype_typeinference
+	iflet_t(var31, &many) {
+		printf("%s\n", *var31);
+	}
+#else
 	iflet(struct ManyVariants, char *, var31, &many) {
 		printf("%s\n", *var31);
 	}
+#endif
 }
