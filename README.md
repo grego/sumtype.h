@@ -16,18 +16,21 @@ int sum(struct BinaryTree *tree) {
 		let(int, leaf) return *leaf;
 		let(struct Node, node) return sum(node->l) + node->x + sum(node->r);
 	}
-
-//if you are using GNU extensions or C2x, the types can be inferred!
-#if Sumtype_typeinference
-	match_tree(tree) {
-		let(leaf) return *leaf;
-		let(node) return sum(node->l) + node->x + sum(node->r);
-	}
-#endif
-
 	// Unreachable
 	return 0;
 }
+
+//if you are using C2x or GNU extensions, the types can be inferred!
+#if Sumtype_typeinference
+int sum_inferred(struct BinaryTree *tree) {
+	match_t(tree) {
+		let_t(leaf) return *leaf;
+		let_t(node) return sum(node->l) + node->x + sum(node->r);
+	}
+	// Unreachable
+	return 0;
+}
+#endif
 ```
 
 Safe, intuitive [sum types](https://en.wikipedia.org/wiki/Sum_type) with exhaustive pattern matching in a single 100 line header, pure C99.
