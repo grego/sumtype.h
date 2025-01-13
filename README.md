@@ -1,3 +1,6 @@
+Note: an arguably simpler to use C23 version is available
+[here](https://git.sr.ht/~grego/sumtype23.h).
+
 ``` c
 struct Node {
 	struct BinaryTree *l;
